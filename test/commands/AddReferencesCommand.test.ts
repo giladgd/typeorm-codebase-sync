@@ -75,7 +75,6 @@ describe("Use AddReferencesCommand to update data-source.ts file", () => {
 
             expect(dataSourceResult).to.haveOwnProperty("AppDataSource");
             expect(dataSourceResult.AppDataSource).to.haveOwnProperty("options");
-            expect(dataSourceResult.AppDataSource.options).to.haveOwnProperty("entities");
 
             ${testCode}
         `);
@@ -125,6 +124,8 @@ describe("Use AddReferencesCommand to update data-source.ts file", () => {
                 `
             }],
             testCode: `
+                expect(dataSourceResult.AppDataSource.options).to.haveOwnProperty("entities");
+                
                 const entities: any = dataSourceResult.AppDataSource.options.entities;
                 expect(entities).to.be.an("array");
                 expect(entities.length).to.be.gt(0);
@@ -181,6 +182,8 @@ describe("Use AddReferencesCommand to update data-source.ts file", () => {
                 `
             }],
             testCode: `
+                expect(dataSourceResult.AppDataSource.options).to.haveOwnProperty("entities");
+                
                 const entities: any = dataSourceResult.AppDataSource.options.entities;
                 expect(entities).to.be.an("array");
                 expect(entities.length).to.be.gt(0);
@@ -229,6 +232,8 @@ describe("Use AddReferencesCommand to update data-source.ts file", () => {
                 `
             }],
             testCode: `
+                expect(dataSourceResult.AppDataSource.options).to.haveOwnProperty("entities");
+                
                 const entities: any = dataSourceResult.AppDataSource.options.entities;
                 expect(entities).to.be.an("array");
                 expect(entities.length).to.be.gt(0);
@@ -277,12 +282,110 @@ describe("Use AddReferencesCommand to update data-source.ts file", () => {
                 `
             }],
             testCode: `
+                expect(dataSourceResult.AppDataSource.options).to.haveOwnProperty("entities");
+                
                 const entities: any = dataSourceResult.AppDataSource.options.entities;
                 expect(entities).to.be.an("array");
                 expect(entities.length).to.be.gt(0);
                 const entityNames = entities.map((entity: any) => entity?.className ?? entity.name);
                 expect(entityNames).to.include("User");
                 expect(entityNames).to.include("SomeModal");
+            `
+        });
+    });
+
+    it("should add migration from folder", async () => {
+        await testDataSourceFile({
+            dataSourceCode: `
+                import { migrations } from "./migrations.js"
+
+                export const AppDataSource = new DataSource({
+                    type: "sqlite",
+                    database: "database.db",
+                    migrations: migrations
+                });
+            `,
+            commandParams: {
+                dataSource: "data-source.ts",
+                migrations: ["migrations"]
+            },
+            files: [{
+                path: "migrations.ts",
+                content: `
+                    import { SomeMigration } from "./migrations/SomeMigration.js";
+
+                    export const migrations = [
+                        SomeMigration
+                    ];
+                `
+            }, {
+                path: "migrations/SomeMigration.ts",
+                content: `
+                    export class SomeMigration {}
+                `
+            }, {
+                path: "migrations/Migration2.ts",
+                content: `
+                    export class Migration2 {}
+                `
+            }],
+            testCode: `
+                expect(dataSourceResult.AppDataSource.options).to.haveOwnProperty("migrations");
+                
+                const migrations: any = dataSourceResult.AppDataSource.options.migrations;
+                expect(migrations).to.be.an("array");
+                expect(migrations.length).to.be.gt(0);
+                const migrationNames = migrations.map((migration: any) => migration.name);
+                expect(migrationNames).to.include("Migration2");
+                expect(migrationNames).to.include("SomeMigration");
+            `
+        });
+    });
+
+    it("should add subscriber from folder", async () => {
+        await testDataSourceFile({
+            dataSourceCode: `
+                import { subscribers } from "./subscribers.js"
+
+                export const AppDataSource = new DataSource({
+                    type: "sqlite",
+                    database: "database.db",
+                    subscribers: subscribers
+                });
+            `,
+            commandParams: {
+                dataSource: "data-source.ts",
+                subscribers: ["subscribers"]
+            },
+            files: [{
+                path: "subscribers.ts",
+                content: `
+                    import { SomeSubscriber } from "./subscribers/SomeSubscriber.js";
+
+                    export const subscribers = [
+                        SomeSubscriber
+                    ];
+                `
+            }, {
+                path: "subscribers/SomeSubscriber.ts",
+                content: `
+                    export class SomeSubscriber {}
+                `
+            }, {
+                path: "subscribers/Subscriber2.ts",
+                content: `
+                    export class Subscriber2 {}
+                `
+            }],
+            testCode: `
+                expect(dataSourceResult.AppDataSource.options).to.haveOwnProperty("subscribers");
+                
+                const subscribers: any = dataSourceResult.AppDataSource.options.subscribers;
+                expect(subscribers).to.be.an("array");
+                expect(subscribers.length).to.be.gt(0);
+                const subscriberNames = subscribers.map((subscriber: any) => subscriber.name);
+                expect(subscriberNames).to.include("Subscriber2");
+                expect(subscriberNames).to.include("SomeSubscriber");
             `
         });
     });

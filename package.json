@@ -1,6 +1,6 @@
 {
   "name": "typeorm-codebase-sync",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Automatically update your codebase to add migrations, entities and subscribers to your `data-source.ts` file",
   "main": "dist/index.js",
   "type": "module",
@@ -23,7 +23,7 @@
     "test:mocha": "mocha --bail",
     "test:typescript": "tsc --build tsconfig.json --dry --force",
     "test:eslint": "eslint --ext .js --ext .ts .",
-    "test:coverage": "c8 mocha",
+    "coverage": "c8 mocha",
     "format": "npm run test:eslint -- --fix",
     "clean": "rm -rf ./node_modules ./dist ./tsconfig.tsbuildinfo"
   },
