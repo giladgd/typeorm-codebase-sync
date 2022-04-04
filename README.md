@@ -5,7 +5,7 @@ Automatically update your codebase to add migrations, entities and subscribers t
 ## Installation
 1. Install dependencies
 ```bash
-npm install --save typeorm typescript ts-node
+npm install --save typeorm typescript
 ```
 
 2. Install `typeorm-codebase-sync`
@@ -13,7 +13,7 @@ npm install --save typeorm typescript ts-node
 npm install --save typeorm-codebase-sync
 ```
 
-3. Add a script to `package.json`
+3. Add `typeorm-sync` script to `package.json`
 ```bash
 npm set-script "typeorm-sync" "typeorm-codebase-sync addReferences --dataSource ./src/db/data-source.ts --migrations ./src/db/migrations --entities ./src/db/entities --subscribers ./src/db/subscribers"
 ```
@@ -24,7 +24,7 @@ npm set-script "posttypeorm" "npm run typeorm-sync"
 ``` 
 
 > Given that your `package.json` contains a script called `typeorm`,
-> After you run `npm run typeorm -- <params>`, the script `typeorm-sync` will automatically get called.
+> after each time you run `npm run typeorm -- <params>`, the `typeorm-sync` script will automatically run
 
 ## Documentation
 ### `addReferences` command
@@ -41,5 +41,5 @@ Files:
 
 Options:
   -h, --help     Show help                                                                 [boolean]
-  -v, --version  Show version number                                                       [boolean]                                                  [boolean]
+  -v, --version  Show version number                                                       [boolean]
 ```
