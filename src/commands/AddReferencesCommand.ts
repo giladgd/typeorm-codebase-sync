@@ -51,7 +51,7 @@ export class AddReferencesCommand implements yargs.CommandModule<object, command
     }
 
     async handler(args: commandArgs) {
-        const cwd = this.cwd;
+        const cwd = this.cwd ?? process.cwd();
         let addedMigrationFiles: string[] = [];
         let addedEntityFiles: string[] = [];
         let addedSubscriberFiles: string[] = [];
