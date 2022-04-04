@@ -1,0 +1,11 @@
+{
+    "check-coverage": true,
+    "all": true,
+    "cache": false,
+    "exclude": ["src/index.ts", "src/cli.ts", "**/*.d.ts"],
+    "extension": [".ts"],
+    "include": ["src/**/*"],
+    "report-dir": "coverage",
+    "lines": 85,
+    "functions": 90
+}

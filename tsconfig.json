@@ -1,0 +1,34 @@
+{
+    "compilerOptions": {
+        "lib": ["es2020"],
+        "module": "es2020",
+        "target": "es2020",
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitOverride": true,
+        "removeComments": false,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "moduleResolution": "node",
+        "strictNullChecks": true,
+        "isolatedModules": true,
+        "rootDir": "./src",
+        "noEmit": false,
+        "outDir": "./dist",
+        "strict": true,
+        "sourceMap": true,
+        "composite": false,
+        "declaration": true,
+        "pretty": true,
+        "stripInternal": true
+    },
+    "files": [
+        "src/index.ts"
+    ],
+    "include": ["./src/"]
+}

@@ -1,0 +1,13 @@
+/.idea
+/.vscode
+/.history
+
+node_modules
+npm-debug.log*
+.DS_Store
+
+/coverage
+/.nyc_output
+
+/dist
+/tsconfig.tsbuildinfo

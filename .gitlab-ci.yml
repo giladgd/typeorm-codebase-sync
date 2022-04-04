@@ -1,0 +1,34 @@
+image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/node:17.7
+
+stages:
+  - test
+  - release
+
+
+test:
+  stage: test
+  script:
+    - npm ci
+
+    - mkdir -p ci
+
+    - npx eslint --ext .js --ext .ts .
+    - npm run test:typescript
+    - npx c8 --reporter cobertura mocha
+  needs: []
+  artifacts:
+    reports:
+      cobertura: coverage/cobertura-coverage.xml
+
+release:
+  stage: release
+  script:
+    - npm ci
+
+    - npm run build
+    - npx semantic-release
+  needs:
+    - test
+  only:
+    refs:
+      - master

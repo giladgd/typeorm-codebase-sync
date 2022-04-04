@@ -1,0 +1,12 @@
+/.idea
+/.vscode
+/.history
+/.git
+/.run
+/.gitlab-ci.yml
+.DS_Store
+
+/coverage
+/.nyc_output
+
+/tsconfig.tsbuildinfo

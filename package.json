@@ -1,0 +1,83 @@
+{
+  "name": "typeorm-codebase-sync",
+  "version": "0.3.0",
+  "description": "Automatically update your codebase to add migrations, entities and subscribers to your `data-source.ts` file",
+  "main": "dist/index.js",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/",
+    "package.json",
+    "README.md"
+  ],
+  "bin": {
+    "typeorm-codebase-sync": "./dist/cli.js"
+  },
+  "scripts": {
+    "prebuild": "rm -rf ./dist ./tsconfig.tsbuildinfo",
+    "build": "tsc --build tsconfig.json --force",
+    "prewatch": "rm -rf ./dist ./tsconfig.tsbuildinfo",
+    "watch": "tsc --build tsconfig.json --watch --force",
+    "test": "npm run test:typescript && npm run test:eslint && npm run test:mocha",
+    "test:mocha": "mocha --bail",
+    "test:typescript": "tsc --build tsconfig.json --dry --force",
+    "test:eslint": "eslint --ext .js --ext .ts .",
+    "test:coverage": "c8 mocha",
+    "format": "npm run test:eslint -- --fix",
+    "clean": "rm -rf ./node_modules ./dist ./tsconfig.tsbuildinfo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giladgd/typeorm-codebase-sync.git"
+  },
+  "keywords": [
+    "typeorm",
+    "data-source.ts",
+    "data-source",
+    "DataSource",
+    "typescript",
+    "ts",
+    "codebase",
+    "code",
+    "ast",
+    "files",
+    "edit",
+    "sync"
+  ],
+  "author": "Gilad S.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/giladgd/typeorm-codebase-sync/issues"
+  },
+  "homepage": "https://github.com/giladgd/typeorm-codebase-sync#readme",
+  "dependencies": {
+    "@types/node": "^17.0.23",
+    "chalk": "^5.0.1",
+    "glob": "^7.2.0",
+    "tslib": "^2.3.1",
+    "yargs": "^17.4.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.0",
+    "@types/chai-as-promised": "^7.1.5",
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.0",
+    "@types/yargs": "^17.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "@typescript-eslint/parser": "^5.16.0",
+    "c8": "^7.11.0",
+    "c8-as-nyc": "^1.0.4",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^8.12.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "github:giladgd/eslint-plugin-node#dev/giladgd/fixImportExtentionFixingInTypeScript",
+    "mocha": "^9.2.2",
+    "semantic-release": "^19.0.2",
+    "ts-node": "^10.7.0"
+  },
+  "peerDependencies": {
+    "typeorm": "^0.3.4",
+    "typescript": "^4.6.3"
+  }
+}
