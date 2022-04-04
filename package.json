@@ -44,6 +44,9 @@
     "edit",
     "sync"
   ],
+  "engines": {
+    "node": ">=16.14.0"
+  },
   "author": "Gilad S.",
   "license": "MIT",
   "bugs": {
