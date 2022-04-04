@@ -2,13 +2,9 @@
 Automatically update your codebase to add migrations, entities and subscribers to your `data-source.ts` file
 
 [![codecov](https://badgen.net/codecov/c/github/giladgd/typeorm-codebase-sync)](https://codecov.io/gh/giladgd/typeorm-codebase-sync)
-
-[![Test](https://github.com/giladgd/typeorm-codebase-sync/actions/workflows/test/badge.svg)](https://github.com/giladgd/typeorm-codebase-sync/actions/workflows/test.yml)
-
+[![Test](https://github.com/giladgd/typeorm-codebase-sync/actions/workflows/test.yml/badge.svg)](https://github.com/giladgd/typeorm-codebase-sync/actions/workflows/test.yml)
 [![Downloads](https://badgen.net/npm/dt/typeorm-codebase-sync)](https://www.npmjs.com/package/typeorm-codebase-sync)
-
 [![License](https://badgen.net/npm/license/typeorm-codebase-sync)](https://www.npmjs.com/package/typeorm-codebase-sync)
-
 [![Version](https://badgen.net/npm/v/typeorm-codebase-sync)](https://www.npmjs.com/package/typeorm-codebase-sync)
 
 
