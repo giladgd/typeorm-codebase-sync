@@ -3,7 +3,6 @@ Automatically update your codebase to add migrations, entities and subscribers t
 
 [![Test](https://github.com/giladgd/typeorm-codebase-sync/actions/workflows/test.yml/badge.svg)](https://github.com/giladgd/typeorm-codebase-sync/actions/workflows/test.yml)
 [![Version](https://badgen.net/npm/v/typeorm-codebase-sync)](https://www.npmjs.com/package/typeorm-codebase-sync)
-[![License](https://badgen.net/npm/license/typeorm-codebase-sync)](https://www.npmjs.com/package/typeorm-codebase-sync)
 [![codecov](https://codecov.io/gh/giladgd/typeorm-codebase-sync/branch/master/graph/badge.svg)](https://codecov.io/gh/giladgd/typeorm-codebase-sync)
 
 
