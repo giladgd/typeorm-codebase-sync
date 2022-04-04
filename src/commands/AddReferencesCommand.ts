@@ -10,10 +10,6 @@ export class AddReferencesCommand implements yargs.CommandModule<object, command
 
     cwd = process.cwd();
 
-    constructor() {
-        this.builder = this.builder.bind(this);
-    }
-
     builder(args: yargs.Argv) {
         return args
             .usage(`Usage: $0 ${this.command} --dataSource <path> [options]`)
@@ -50,7 +46,7 @@ export class AddReferencesCommand implements yargs.CommandModule<object, command
             });
     }
 
-    async handler(args: commandArgs) {
+    handler = async (args: commandArgs) => {
         const cwd = this.cwd ?? process.cwd();
         let addedMigrationFiles: string[] = [];
         let addedEntityFiles: string[] = [];

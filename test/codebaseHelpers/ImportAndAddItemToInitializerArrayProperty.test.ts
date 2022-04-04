@@ -318,6 +318,156 @@ describe("Update DataSource initializer in data-source.ts file", () => {
             });
         });
 
+        it("external file with default exported variable list", async () => {
+            await testDataSourceFileWithLinkToEntitiesInOtherFile({
+                entityName,
+                dataSourceCode: `
+                    import entities from "./entities.js"
+
+                    export const AppDataSource = new DataSource({
+                        type: "sqlite",
+                        database: "database.db",
+                        entities: entities
+                    });
+                `,
+                files: [{
+                    path: "entities.ts",
+                    content: `
+                        import { SomeModal } from "./entities/SomeModal.js";
+
+                        const entities1 = [
+                            SomeModal
+                        ];
+                        
+                        export default entities1;
+                    `
+                }, {
+                    path: "entities/SomeModal.ts",
+                    content: `
+                        export class SomeModal {}
+                    `
+                }],
+                testCode: `
+                    const entities: any = dataSourceResult.AppDataSource.options.entities;
+                    expect(entities).to.be.an("array");
+                    expect(entities.length).to.be.gt(0);
+                    expect(entities[entities.length - 1].name).to.be.eq(${JSON.stringify(entityName)});
+                `
+            });
+        });
+
+        it("external file with default exported list", async () => {
+            await testDataSourceFileWithLinkToEntitiesInOtherFile({
+                entityName,
+                dataSourceCode: `
+                    import entities from "./entities.js"
+
+                    export const AppDataSource = new DataSource({
+                        type: "sqlite",
+                        database: "database.db",
+                        entities: entities
+                    });
+                `,
+                files: [{
+                    path: "entities.ts",
+                    content: `
+                        import { SomeModal } from "./entities/SomeModal.js";
+
+                        export default [
+                            SomeModal
+                        ];
+                    `
+                }, {
+                    path: "entities/SomeModal.ts",
+                    content: `
+                        export class SomeModal {}
+                    `
+                }],
+                testCode: `
+                    const entities: any = dataSourceResult.AppDataSource.options.entities;
+                    expect(entities).to.be.an("array");
+                    expect(entities.length).to.be.gt(0);
+                    expect(entities[entities.length - 1].name).to.be.eq(${JSON.stringify(entityName)});
+                `
+            });
+        });
+
+        it("external file with default exported variable object", async () => {
+            await testDataSourceFileWithLinkToEntitiesInOtherFile({
+                entityName,
+                dataSourceCode: `
+                    import entities from "./entities.js"
+
+                    export const AppDataSource = new DataSource({
+                        type: "sqlite",
+                        database: "database.db",
+                        entities: entities
+                    });
+                `,
+                files: [{
+                    path: "entities.ts",
+                    content: `
+                        import { SomeModal } from "./entities/SomeModal.js";
+
+                        const entities1 = {
+                            SomeModal
+                        };
+                        
+                        export default entities1;
+                    `
+                }, {
+                    path: "entities/SomeModal.ts",
+                    content: `
+                        export class SomeModal {}
+                    `
+                }],
+                testCode: `
+                    const entities: any = dataSourceResult.AppDataSource.options.entities;
+                    expect(entities).to.be.an("object");
+                    const entityNamesList: (string | undefined)[] = Object.values(entities).map((entity: any) => entity?.name);
+                    expect(entityNamesList.length).to.be.gt(0);
+                    expect(entityNamesList).to.include(${JSON.stringify(entityName)});
+                `
+            });
+        });
+
+        it("external file with default exported object", async () => {
+            await testDataSourceFileWithLinkToEntitiesInOtherFile({
+                entityName,
+                dataSourceCode: `
+                    import entities from "./entities.js"
+
+                    export const AppDataSource = new DataSource({
+                        type: "sqlite",
+                        database: "database.db",
+                        entities: entities
+                    });
+                `,
+                files: [{
+                    path: "entities.ts",
+                    content: `
+                        import { SomeModal } from "./entities/SomeModal.js";
+
+                        export default {
+                            SomeModal
+                        };
+                    `
+                }, {
+                    path: "entities/SomeModal.ts",
+                    content: `
+                        export class SomeModal {}
+                    `
+                }],
+                testCode: `
+                    const entities: any = dataSourceResult.AppDataSource.options.entities;
+                    expect(entities).to.be.an("object");
+                    const entityNamesList: (string | undefined)[] = Object.values(entities).map((entity: any) => entity?.name);
+                    expect(entityNamesList.length).to.be.gt(0);
+                    expect(entityNamesList).to.include(${JSON.stringify(entityName)});
+                `
+            });
+        });
+
         it("external file with exported list - shorthand property assignment", async () => {
             await testDataSourceFileWithLinkToEntitiesInOtherFile({
                 entityName,

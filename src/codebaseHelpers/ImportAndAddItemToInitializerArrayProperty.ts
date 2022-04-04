@@ -21,7 +21,7 @@ export class ImportAndAddItemToInitializerArrayProperty {
     private referenceAdded: boolean = false;
     private importAdded: boolean = false;
     private filesToAddImportInFilePaths = new Set<string>();
-    private variableDeclarationReplacementMap = new Map<ts.VariableDeclaration, ts.VariableDeclaration>();
+    private declarationReplacementMap = new Map<ts.Declaration, ts.Declaration>();
 
     private linkingError: boolean = false;
 
@@ -441,38 +441,60 @@ export class ImportAndAddItemToInitializerArrayProperty {
                 declaration, declaration.name, declaration.exclamationToken, declaration.type,
                 updateWithTypeExpression(declaration.initializer,
                     (valueExpression) => {
-                        if (ts.isArrayLiteralExpression(valueExpression)) {
-                            const resExpression = this.updateArrayLiteralExpression(valueExpression, undefined);
+                        const resExpression = this.updateExpression(valueExpression, valueExpression.getSourceFile());
 
-                            if (valueExpression != (resExpression))
-                                declarationUpdated = true;
+                        if (valueExpression != resExpression)
+                            declarationUpdated = true;
 
-                            return resExpression;
-                        }
-
-                        if (ts.isObjectLiteralExpression(valueExpression) && this.treatObjectLiteralExpressionValuesAsList) {
-                            const resExpression = this.updateObjectLiteralExpression(valueExpression, undefined);
-
-                            if (valueExpression != (resExpression))
-                                declarationUpdated = true;
-
-                            return resExpression;
-                        }
-
-                        return valueExpression;
+                        return resExpression;
                     }
                 )
             );
 
             if (declarationUpdated) {
-                this.variableDeclarationReplacementMap.set(declaration, newDeclaration);
+                this.declarationReplacementMap.set(declaration, newDeclaration);
+
+                this.codebase.markSourceFileAsUpdated(declaration.getSourceFile());
+            }
+        } else if (
+            // *export []*
+            // *export {}*
+            ts.isExportAssignment(declaration)
+        ) {
+            if (
+                !this.updateOtherRelevantFiles &&
+                path.resolve(sourceFile.fileName) != path.resolve(this.codebase.entryFilePath)
+            )
+                return;
+
+            let declarationUpdated = false;
+            const newDeclaration = ts.factory.updateExportAssignment(
+                declaration, declaration.decorators, declaration.modifiers,
+                updateWithTypeExpression(declaration.expression,
+                    (valueExpression) => {
+                        const resExpression = this.updateExpression(valueExpression, valueExpression.getSourceFile());
+
+                        if (valueExpression != resExpression)
+                            declarationUpdated = true;
+
+                        return resExpression;
+                    }
+                )
+            );
+
+            if (declarationUpdated) {
+                this.declarationReplacementMap.set(declaration, newDeclaration);
 
                 this.codebase.markSourceFileAsUpdated(declaration.getSourceFile());
             }
         } else if (
             // *import {value} from "./somewhere"*
-            ts.isImportSpecifier(declaration)
+            ts.isImportSpecifier(declaration) ||
+            ts.isImportClause(declaration)
         ) {
+            if (declaration.name == null)
+                return;
+
             const declarationNamedImportSymbol = this.codebase.checker.getSymbolAtLocation(declaration.name);
 
             if (declarationNamedImportSymbol == null)
@@ -570,12 +592,12 @@ export class ImportAndAddItemToInitializerArrayProperty {
         ]);
     }
 
-    private updateDeclaration(declaration: ts.VariableDeclaration): ts.VariableDeclaration {
-        const res = this.variableDeclarationReplacementMap.get(declaration);
+    private updateDeclaration<T extends ts.Declaration>(declaration: T): T {
+        const res = this.declarationReplacementMap.get(declaration);
 
         if (res != null) {
-            this.variableDeclarationReplacementMap.delete(declaration);
-            return res;
+            this.declarationReplacementMap.delete(declaration);
+            return res as T;
         }
 
         return declaration;
@@ -590,7 +612,8 @@ export class ImportAndAddItemToInitializerArrayProperty {
                             statement.declarationList.declarations.map(this.updateDeclaration)
                         )
                     );
-                }
+                } else if (ts.isExportAssignment(statement))
+                    return this.updateDeclaration(statement);
 
                 return statement;
             })
