@@ -10,12 +10,13 @@ Automatically update your codebase to add migrations, entities and subscribers t
 ## Installation
 1. Install dependencies
 ```bash
-npm install --save typeorm typescript
+npm install --save-dev typescript
+npm install --save typeorm
 ```
 
 2. Install `typeorm-codebase-sync`
 ```bash
-npm install --save typeorm-codebase-sync
+npm install --save-dev typeorm-codebase-sync
 ```
 
 3. Add `typeorm-sync` script to `package.json`
